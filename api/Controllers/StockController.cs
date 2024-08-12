@@ -31,12 +31,12 @@ namespace api.Controllers
         public IActionResult GetById([FromRoute] int id)
         {
             //  var stock = _context.Stocks.FirstOrDefault(s => s.Id == id);
-            var stock = _context.Stocks.Find(id);
+            var foundStock = _context.Stocks.Find(id);
 
-            if (stock == null)
+            if (foundStock == null)
                 return NotFound();
 
-            return Ok(stock.ToStockDto());
+            return Ok(foundStock.ToStockDto());
         }
 
         [HttpPost]
@@ -67,6 +67,19 @@ namespace api.Controllers
 
             _context.SaveChanges();
             return Ok(foundStock.ToStockDto());
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id) 
+        {
+            var foundStock = _context.Stocks.FirstOrDefault(s => s.Id == id);
+
+            if (foundStock == null)
+                return NotFound();
+
+            _context.Stocks.Remove(foundStock);
+            _context.SaveChanges();
+            return NoContent();
         }
     }
 }
