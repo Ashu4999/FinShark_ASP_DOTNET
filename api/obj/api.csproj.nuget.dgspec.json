@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Learning\\ASP .NET\\Stock_Market_Project\\api\\api.csproj": {}
+    "C:\\Users\\IncubXperts\\Desktop\\Learning\\ASP .NET\\FinShark_ASP_DOTNET\\api\\api.csproj": {}
   },
   "projects": {
-    "F:\\Learning\\ASP .NET\\Stock_Market_Project\\api\\api.csproj": {
+    "C:\\Users\\IncubXperts\\Desktop\\Learning\\ASP .NET\\FinShark_ASP_DOTNET\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Learning\\ASP .NET\\Stock_Market_Project\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\IncubXperts\\Desktop\\Learning\\ASP .NET\\FinShark_ASP_DOTNET\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "F:\\Learning\\ASP .NET\\Stock_Market_Project\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "F:\\Learning\\ASP .NET\\Stock_Market_Project\\api\\obj\\",
+        "projectPath": "C:\\Users\\IncubXperts\\Desktop\\Learning\\ASP .NET\\FinShark_ASP_DOTNET\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\IncubXperts\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\IncubXperts\\Desktop\\Learning\\ASP .NET\\FinShark_ASP_DOTNET\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\IncubXperts\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -47,6 +47,22 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.7, )"
             },
