@@ -13,9 +13,9 @@ namespace api.Controllers
     [ApiController]
     public class CommentController: ControllerBase
     {
-        private readonly ICommnetRepository _commnetRepo;
+        private readonly ICommentRepository _commnetRepo;
         private readonly IStockRepository _stockRepo;
-        public CommentController(ICommnetRepository commnetRepo, IStockRepository stockRepo) {
+        public CommentController(ICommentRepository commnetRepo, IStockRepository stockRepo) {
             _commnetRepo = commnetRepo;
             _stockRepo = stockRepo;
         }
@@ -49,6 +49,16 @@ namespace api.Controllers
             var commentModel = createCommentRequestDto.ToCommentFromCreate(stockId);
             await _commnetRepo.CreateAsync(commentModel);
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateCommentRequestDto) {
+            var foundComment = await _commnetRepo.UpdateAsync(id, updateCommentRequestDto);
+
+            if (foundComment == null) 
+                return NotFound();
+
+            return Ok(foundComment.ToCommentDto());
         }
     }
 }
