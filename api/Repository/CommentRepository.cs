@@ -14,18 +14,31 @@ namespace api.Repository
     public class CommentRepository : ICommentRepository
     {
         private readonly ApplicationDBContext _context;
-        public CommentRepository (ApplicationDBContext context) {
+        public CommentRepository(ApplicationDBContext context)
+        {
             _context = context;
         }
 
         public async Task<Comment> CreateAsync(Comment commentModel)
         {
-            await _context.Comments.AddAsync(commentModel);  
+            await _context.Comments.AddAsync(commentModel);
             await _context.SaveChangesAsync();
-            return commentModel;        
+            return commentModel;
         }
 
-        public async Task<List<Comment>> GetAllAsync() {
+        public async Task<Comment?> DeleteAsync(int id)
+        {
+            var foundComment = await _context.Comments.FirstOrDefaultAsync(s => s.Id == id);
+            if (foundComment == null)
+                return null;
+            
+            _context.Remove(foundComment);
+            await _context.SaveChangesAsync();
+            return foundComment;
+        }
+
+        public async Task<List<Comment>> GetAllAsync()
+        {
             return await _context.Comments.ToListAsync();
         }
 
@@ -38,7 +51,8 @@ namespace api.Repository
         {
             var foundComment = await _context.Comments.FirstOrDefaultAsync(s => s.Id == id);
 
-            if (foundComment == null) {
+            if (foundComment == null)
+            {
                 return null;
             }
 

@@ -60,5 +60,15 @@ namespace api.Controllers
 
             return Ok(foundComment.ToCommentDto());
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteComment([FromRoute] int id) {
+            var deletedComment = await _commnetRepo.DeleteAsync(id);
+
+            if (deletedComment == null) 
+                return NotFound();
+
+            return NoContent();
+        }
     }
 }
