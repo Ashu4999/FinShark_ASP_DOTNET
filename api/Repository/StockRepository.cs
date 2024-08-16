@@ -34,7 +34,7 @@ namespace api.Repository
             var stockModel = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == id);
             if (stockModel == null)
                 return null;
-            
+
             _context.Stocks.Remove(stockModel);
             await _context.SaveChangesAsync();
             return stockModel;
@@ -44,25 +44,32 @@ namespace api.Repository
         {
             var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(queryObject.Symbol)) {
+            if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
                 stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
             }
 
-            if (!string.IsNullOrWhiteSpace(queryObject.CompanyName)) {
+            if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+            {
                 stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
             }
 
-            if (!string.IsNullOrWhiteSpace(queryObject.SortBy)) {
-                if (queryObject.SortBy.Equals("Symbol")) {
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            {
+                if (queryObject.SortBy.Equals("Symbol"))
+                {
                     stocks = queryObject.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
                 }
 
-                if (queryObject.SortBy.Equals("CompanyName")) {
+                if (queryObject.SortBy.Equals("CompanyName"))
+                {
                     stocks = queryObject.IsDescending ? stocks.OrderByDescending(s => s.CompanyName) : stocks.OrderBy(s => s.CompanyName);
                 }
             }
 
-            return  await stocks.ToListAsync();
+            var skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+            return await stocks.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
@@ -79,7 +86,8 @@ namespace api.Repository
         {
             var foundStock = await _context.Stocks.FirstOrDefaultAsync(s => s.Id == id);
 
-            if (foundStock == null) {
+            if (foundStock == null)
+            {
                 return null;
             }
 
