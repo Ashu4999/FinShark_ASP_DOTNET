@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Comment;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComments()
+        public async Task<IActionResult> GetComments([FromQuery] CommentQueryObject commentQueryObject)
         {
-            var comments = await _commnetRepo.GetAllAsync();
+            var comments = await _commnetRepo.GetAllAsync(commentQueryObject);
             var commnetDto = comments.Select(s => s.ToCommentDto());
             return Ok(commnetDto);
         }
