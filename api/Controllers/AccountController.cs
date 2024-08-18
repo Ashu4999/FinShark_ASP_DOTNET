@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.Account;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,11 @@ namespace api.Controllers
                     UserName = registerDto.Username,
                     Email = registerDto.Email
                 };
+
+                var foundUser = await _userManager.FindByEmailAsync(registerDto.Email);
+
+                if (foundUser != null) 
+                    return Conflict("User already exists");
 
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
