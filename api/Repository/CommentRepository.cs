@@ -46,12 +46,13 @@ namespace api.Repository
                 comments = comments.Where(s => s.Title.Contains(commentQueryObject.Title));
             }
 
+            comments = comments.Include(s => s.AppUser);
             return await comments.ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
         {
-            return await _context.Comments.FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Comments.Include(s => s.AppUser).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<Comment?> UpdateAsync(int id, UpdateCommentRequestDto updateCommentRequestDto)
