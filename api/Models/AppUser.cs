@@ -10,6 +10,6 @@ namespace api.Models
     [Index(nameof(Email), IsUnique = true)]
     public class AppUser : IdentityUser
     {
-        
+        public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
     }
 }
