@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
@@ -22,6 +23,18 @@ namespace api.Repository
             await _context.Portfolios.AddAsync(portfolio);
             await _context.SaveChangesAsync();
             return portfolio;
+        }
+
+        public async Task<Portfolio?> DeleteAsync(AppUser appUser, string symbol)
+        {
+            var foundPortfolioStock = await _context.Portfolios.FirstOrDefaultAsync(s => s.AppUserId == appUser.Id && s.Stock.Symbol.ToLower() == symbol.ToLower());
+
+            if (foundPortfolioStock == null) 
+                return null;
+
+            _context.Portfolios.Remove(foundPortfolioStock);
+            await _context.SaveChangesAsync();
+            return foundPortfolioStock;
         }
 
         public async Task<List<Stock>> GetUserPortfolio(AppUser user)

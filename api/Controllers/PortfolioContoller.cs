@@ -36,7 +36,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddPortfolio(string symbol) {
+        public async Task<IActionResult> AddPortfolio([FromQuery] string symbol) {
             var userEmail = User.GetUserEmail();
             var foundUser = await _userManager.FindByEmailAsync(userEmail);
             var foundStock = await _stockRepo.GetBySymbol(symbol);    
@@ -62,6 +62,23 @@ namespace api.Controllers
                 return StatusCode(500, "Problem to add stock to portfolio");
 
             return Created();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeletePortfolio([FromQuery] string symbol) {
+            var userEmail = User.GetUserEmail();
+            var foundUser = await _userManager.FindByEmailAsync(userEmail);
+
+            var userPortfolio = await _portfolioRepo.GetUserPortfolio(foundUser);
+            var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
+
+            if (filteredStock.Count() < 1) {
+                return BadRequest("Stock not found in portfolio");
+            }
+
+            await _portfolioRepo.DeleteAsync(foundUser, symbol);
+            return NoContent();
         }
     }
 }
