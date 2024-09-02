@@ -3,6 +3,8 @@ using api.Interfaces;
 using api.Models;
 using api.Repository;
 using api.Service;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +56,13 @@ builder.Services.AddAuthentication(options => {
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
     };
 });
+//hangfire attached to dependecy injection
+builder.Services.AddHangfire((sp, config) =>
+{
+    string? connectionString = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
+    config.UseSqlServerStorage(connectionString);
+});
+builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
@@ -74,4 +83,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 // add this line to use the routing for the controllers (For Swagger)
 app.MapControllers();
+//hangfire dashboard config
+app.UseHangfireDashboard("/test/hangfire", new DashboardOptions
+{
+    DashboardTitle = "HangFire Dashboard Demo",
+    DarkModeEnabled = false,
+    DisplayStorageConnectionString = false,
+    Authorization = new [] {
+        new HangfireCustomBasicAuthenticationFilter {
+            User = "admin",
+            Pass = "admin@123"
+        }
+    }
+});
 app.Run();
